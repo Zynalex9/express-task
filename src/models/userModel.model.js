@@ -21,7 +21,7 @@ const userSchema = new Schema(
     },
     todos: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Todos",
+      ref: "Todo",
     },
   },
   { timestamps: true }
