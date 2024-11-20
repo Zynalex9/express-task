@@ -26,7 +26,11 @@ const userSchema = new Schema(
         ref: "Todo",
       },
     ],
+    refreshToken: {
+      type: String,
+    },
   },
+
   { timestamps: true },
 );
 
