@@ -43,5 +43,41 @@ const createTask = async (req, res) => {
     });
   }
 };
+const updateTask = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+    const { title, description, isCompleted } = req.body;
 
-export { createTask };
+    const task = await todoModel.findOne({
+      _id: taskId,
+      createdBy: req.user._id,
+    });
+    if (!task) {
+      return res.status(404).json({
+        success: false,
+        message: "Task not found or you do not have permission to update it",
+        data: {},
+      });
+    }
+
+    if (title) task.title = title;
+    if (description) task.description = description;
+    if (typeof isCompleted === "boolean") task.isCompleted = isCompleted;
+
+    await task.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Task updated successfully",
+      data: task,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Error",
+      error: error.message,
+    });
+  }
+};
+
+export { createTask,updateTask };
