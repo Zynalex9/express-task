@@ -6,7 +6,7 @@ const verifyJWT = async (req, res, next) => {
     if (!accessToken) {
       return res.status(401).json({
         success: false,
-        message: "Middleware Error Token not found",
+        message: "Ops ! You need to login",
       });
     }
     const decodedToken = jwt.verify(accessToken, process.env.JWT_SECRET_KEY);
