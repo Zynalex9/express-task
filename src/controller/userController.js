@@ -86,9 +86,9 @@ const loginUser = async (req, res) => {
     const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(
       user._id,
     );
-    const loggedInUser = await userModel.findById(user._id).select(
-      "-password -refreshToken",
-    );
+    const loggedInUser = await userModel
+      .findById(user._id)
+      .select("-password -refreshToken");
     const options = {
       httpOnly: true,
       secure: true,
@@ -107,8 +107,14 @@ const loginUser = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Error",
-      error:error.message,
+      error: error.message,
     });
   }
 };
-export { registerUser, loginUser };
+const logoutUser = async (req, res) => {
+  console.log(req.user)
+  res.status(200).json({
+    "message":"Hello",
+  });
+};
+export { registerUser, loginUser, logoutUser };
