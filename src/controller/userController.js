@@ -112,9 +112,29 @@ const loginUser = async (req, res) => {
   }
 };
 const logoutUser = async (req, res) => {
-  console.log(req.user)
-  res.status(200).json({
-    "message":"Hello",
-  });
+  await userModel.findByIdAndUpdate(
+    req.user._id,
+    {
+      $unset: {
+        refreshToken: 1,
+      },
+    },
+    {
+      new: true,
+    },
+  );
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json({
+      message: "User logged out",
+      success: true,
+    });
 };
 export { registerUser, loginUser, logoutUser };
