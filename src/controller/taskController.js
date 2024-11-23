@@ -79,5 +79,32 @@ const updateTask = async (req, res) => {
     });
   }
 };
+const toggleTaskCompletion = async (req, res) => {
+  const { taskId } = req.params;
+  try {
+    const task = await todoModel.findOne({ taskId, createdBy: req.user._id });
+    if (!task) {
+      return res.status(404).json({
+        success: false,
+        message: "Task not found or you do not have permission to modify it",
+        data: {},
+      });
+    }
+    task.isCompleted = !task.isCompleted
+    await task.save();
 
-export { createTask,updateTask };
+    return res.status(200).json({
+      success: true,
+      message: `Task marked as ${task.isCompleted ? "completed" : "incomplete"}`,
+      data: task,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Error",
+      error: error.message,
+    });
+  }
+};
+
+export { createTask, updateTask, toggleTaskCompletion };
