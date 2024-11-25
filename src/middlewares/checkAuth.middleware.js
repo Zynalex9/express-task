@@ -1,18 +1,20 @@
+import jwt from "jsonwebtoken"
 const isAuthenticated = (req, res, next) => {
-    try {
-      const accessToken = req.cookies?.accessToken;
-      if (!accessToken) {
-        return res.status(401).json({ isAuthenticated: false });
-      }
-  
-      const decodedToken = jwt.verify(accessToken, process.env.JWT_SECRET_KEY);
-      if (!decodedToken) {
-        return res.status(401).json({ isAuthenticated: false });
-      }
-  
-      next();
-    } catch (error) {
+  try {
+    const accessToken = req.cookies?.accessToken;
+    if (!accessToken) {
       return res.status(401).json({ isAuthenticated: false });
     }
-  };
-  export {isAuthenticated}
+
+    const decodedToken = jwt.verify(accessToken, process.env.JWT_SECRET_KEY);
+    if (!decodedToken) {
+      return res.status(401).json({ isAuthenticated: false });
+    }
+
+    next();
+  } catch (error) {
+    console.log(error.message);
+    return res.status(401).json({ isAuthenticated: false });
+  }
+};
+export { isAuthenticated };
