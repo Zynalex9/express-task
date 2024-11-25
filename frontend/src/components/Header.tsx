@@ -16,7 +16,6 @@ const Header = () => {
   const checkAuth = async () => {
     try {
       const response = await axios.get("/api/user/check-auth");
-      console.log("Response from /check-auth:", response);
       setIsAuthenticated(response.data.isAuthenticated);
     } catch (error) {
       setIsAuthenticated(false);
@@ -63,7 +62,7 @@ const Header = () => {
             My Profile
           </Link>
           <Link
-            to="/"
+            to="/tasks"
             className="text-gray-700 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400 transition"
           >
             My Todos

@@ -1,3 +1,4 @@
+import { getAdapter } from "axios";
 import connectDB from "../db/index.js";
 import todoModel from "../models/todosModel.model.js";
 import userModel from "../models/userModel.model.js";
@@ -90,7 +91,7 @@ const toggleTaskCompletion = async (req, res) => {
         data: {},
       });
     }
-    task.isCompleted = !task.isCompleted
+    task.isCompleted = !task.isCompleted;
     await task.save();
 
     return res.status(200).json({
@@ -106,5 +107,26 @@ const toggleTaskCompletion = async (req, res) => {
     });
   }
 };
-
-export { createTask, updateTask, toggleTaskCompletion };
+const getAllTodos = async (req, res) => {
+  try {
+    const todos = await todoModel.find({ createdBy: req.user.id });
+    if (!todos) {
+      return res.status(404).json({
+        success: false,
+        message: "No todos yet. You should have a thing 'TO-DO' :)",
+      });
+    }
+    return res.status(201).json({
+      success: true,
+      message: "Todos found !!",
+      todos: todos,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Error",
+      error: error.message,
+    });
+  }
+};
+export { createTask, updateTask, toggleTaskCompletion, getAllTodos };

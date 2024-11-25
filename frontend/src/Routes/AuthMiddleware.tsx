@@ -13,7 +13,6 @@ const AuthMiddleware = ({ children }: AuthCheckProps) => {
     const checkAuth = async () => {
       try {
         const response = await axios.get("/api/user/check-auth");
-        console.log("Response from /check-auth:", response);
         setIsAuthenticated(response.data.isAuthenticated);
 
       } catch (error) {

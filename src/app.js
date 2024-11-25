@@ -9,12 +9,5 @@ import { userRouter } from "./routes/user.route.js";
 import { todosRouter } from "./routes/todos.route.js";
 app.use("/api/user", userRouter);
 app.use("/api/task", todosRouter);
-app.get("/api/jokes", (req, res) => {
-  const jokes = [
-    { title: "hello 1", desc: "mellow 1" },
-    { title: "hello 2", desc: "mellow 2" },
-    { title: "hello 3", desc: "mellow 3" },
-  ];
-  res.send(jokes);
-});
+
 export { app };
