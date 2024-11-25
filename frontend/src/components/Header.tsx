@@ -1,8 +1,10 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
     const darkModePreference = localStorage.getItem("darkMode") === "true";
@@ -11,7 +13,28 @@ const Header = () => {
       document.documentElement.classList.add("dark");
     }
   }, []);
-
+  const checkAuth = async () => {
+    try {
+      const response = await axios.get("/api/user/check-auth");
+      console.log("Response from /check-auth:", response);
+      setIsAuthenticated(response.data.isAuthenticated);
+    } catch (error) {
+      setIsAuthenticated(false);
+    }
+  };
+  checkAuth();
+  const navigate = useNavigate();
+  const handleLogin = () => {
+    navigate("/login");
+  };
+  const handleSignOut = async () => {
+    try {
+      await axios.post("/api/user/logout");
+      setIsAuthenticated(false);
+    } catch (error) {
+      console.error("Sign out error", error);
+    }
+  };
   const toggleDarkMode = () => {
     setIsDarkMode((prevMode) => {
       const newMode = !prevMode;
@@ -47,8 +70,9 @@ const Header = () => {
           </Link>
           <button
             className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-500 transition"
+            onClick={isAuthenticated ? handleSignOut : handleLogin}
           >
-            Sign Out
+            {isAuthenticated ? "Sign Out" : "Login"}
           </button>
           <button
             className="bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition"
