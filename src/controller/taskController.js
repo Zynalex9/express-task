@@ -18,7 +18,7 @@ const createTask = async (req, res) => {
       createdBy: req.user?._id,
     });
     if (existingTask) {
-      return res.status(400).json({
+      return res.status(401).json({
         message: `${title} already exist choose another title`,
         success: false,
         data: {},
